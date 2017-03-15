@@ -1,0 +1,36 @@
+@keyframes smooth {
+    from {
+        background-color: #DDDDDD;
+        color: #222222;
+        font-size: 4em;
+    }
+    to {
+        background-color: #F9F9F9;
+        /*background-color: #000;*/
+        color: #0F0F0F;
+        font-size: 4.5em;
+    }
+}
+
+.log-in-button {
+    width: 400px;
+    height: 400px;
+    border-radius: 1000px;
+    /*margin: auto;
+    display: block;*/
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4em;
+    color: #222222;
+}
+
+.log-in-button:hover {
+    animation-name: smooth;
+    animation-timing-function: ease;
+    animation-iteration-count: 1;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    /*animation-play-state: paused;*/
+}
