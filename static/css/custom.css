@@ -43,3 +43,8 @@
     transform: translate(-50%, -50%);
     text-align: center;
 }
+
+thead tr th {
+    text-align: center;
+    font-size: 1.25em;
+}

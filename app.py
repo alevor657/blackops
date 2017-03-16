@@ -41,11 +41,29 @@ def dashboard():
     else:
         return redirect(url_for('index'))
 
-@app.route('/dashboard/personal/', methods=['GET'])
+@app.route('/dashboard/personal/', methods=['GET', 'POST'])
 def personal():
     """ Main dashboard """
     if g.user:
-        return render_template('personal.html', table=con.create_workers_table())
+        if (request.method == 'GET'):
+            delete_per = request.args.get('del_per')
+            delete_mat = request.args.get('del_mat')
+            if (delete_per):
+                con.delete_worker(delete_per)
+            if (delete_mat):
+                con.delete_material(delete_mat)
+
+        if (request.method == 'POST'):
+            if 'add_worker' in request.form:
+                con.add_worker(request.form)
+            elif 'add_material' in request.form:
+                con.add_material(request.form)
+
+        return render_template(
+            'personal.html',
+            table_workers=con.create_workers_table(),
+            table_material=con.create_material_table()
+        )
     else:
         return redirect(url_for('index'))
 
