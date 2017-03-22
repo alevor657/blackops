@@ -75,7 +75,8 @@ def personal():
             edit_per=edit_per,
             edit_mat=edit_mat,
             worker=con.get_worker(edit_per),
-            material=con.get_material(edit_mat)
+            material=con.get_material(edit_mat),
+            av_materials=con.get_avaliable_material(edit_per)
         )
     else:
         return redirect(url_for('index'))

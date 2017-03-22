@@ -55,6 +55,7 @@ class Controller():
                             <td>{id}</td>
                             <td>{name}</td>
                             <td>{occup}</td>
+                            <td>{backpack}</td>
                             <td>{lvl}</td>
                             <td>
                                 <a href='?del_per={id}'>delete</a>
@@ -65,7 +66,8 @@ class Controller():
                             id=item.id,
                             name=item.name,
                             occup=item.occupation,
-                            lvl=item.classlvl
+                            lvl=item.classlvl,
+                            backpack=item.backpack
                             )
         table += "</tbody>"
         return table
@@ -112,28 +114,31 @@ class Controller():
     def add_worker(self, form):
         level = int(form['classlvl'])
         worker = None
-        print(level)
+        backpack = ", "
+        backpack = backpack.join(form.getlist('check'))
+
+        # Delete materials from database
+        for item in form.getlist('check'):
+            print(item)
 
         if (level == 1):
             worker = Staff(
                 name=form["name"],
-                classlvl=form["classlvl"]
+                classlvl=form["classlvl"],
+                backpack=backpack
             )
         elif (level == 2):
             worker = Manager(
                 name=form["name"],
-                classlvl=form["classlvl"]
+                classlvl=form["classlvl"],
+                backpack=backpack
             )
         elif (level == 3):
             worker = Chef(
                 name=form["name"],
-                classlvl=form["classlvl"]
+                classlvl=form["classlvl"],
+                backpack=backpack
             )
-        # worker = Workers(
-        #     name=form["name"],
-        #     occupation=form["occupation"],
-        #     classlvl=form["classlvl"]
-        # )
 
         self.session.add(worker)
         self.session.commit()
@@ -162,3 +167,12 @@ class Controller():
     def edit_material(self, material, form):
         self.delete_material(material)
         self.add_material(form)
+
+    def get_avaliable_material(self, edit_id):
+        worker = self.get_worker(edit_id)
+
+        if not worker:
+            return None
+
+        avaliable_materials = self.session.query(Materials).filter(Materials.classlvl <= worker.classlvl).all()
+        return avaliable_materials

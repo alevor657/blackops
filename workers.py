@@ -13,6 +13,7 @@ class Workers(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     occupation = Column(String)
+    backpack = Column(String)
     classlvl = Column(Integer)
 
     def __init__(self, name, occupation, classlvl):
