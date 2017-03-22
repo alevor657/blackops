@@ -119,7 +119,7 @@ class Controller():
 
         # Delete materials from database
         for item in form.getlist('check'):
-            print(item)
+            self.delete_material(self.get_material_by_type(item).id)
 
         if (level == 1):
             worker = Staff(
@@ -167,6 +167,9 @@ class Controller():
     def edit_material(self, material, form):
         self.delete_material(material)
         self.add_material(form)
+
+    def get_material_by_type(self, mat_type):
+        return self.session.query(Materials).filter(Materials.material_type == mat_type).first()
 
     def get_avaliable_material(self, edit_id):
         worker = self.get_worker(edit_id)
