@@ -1,0 +1,50 @@
+{% if not edit_per %}
+<div class="col-md-5 text-center">
+    <h3>Add workers</h3>
+    <form role="form" method="POST" action="{{url_for('personal')}}">
+        <div class="form-group">
+            <label for="name">Name: </label>
+            <input type="text" name="name" class="form-control" />
+        </div>
+        <!-- <div class="form-group">
+            <label for="occupation">Occupation: </label>
+            <input type="text" name="occupation" class="form-control" />
+        </div> -->
+        <div class="form-group">
+            <label for="sel1">Classification level:</label>
+            <select class="form-control" id="sel1" name="classlvl">
+                <option value="1">1, Staff</option>
+                <option value="2">2, Manager</option>
+                <option value="3">3, Chef</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-default" name="add_worker">Submit</button>
+    </form>
+</div>
+{% endif %}
+
+{% if edit_per %}
+<div class="col-md-5 text-center">
+    <h3>Edit {{ worker.name }}</h3>
+    <form role="form" method="POST" action="{{url_for('personal') + '?edit_per=' + edit_per}}">
+        <div class="form-group">
+            <label for="name">Name: </label>
+            <input type="text" name="name" class="form-control" value="{{ worker.name }}"/>
+        </div>
+        <div class="form-group">
+            <label for="occupation">Occupation: </label>
+            <input type="text" name="occupation" class="form-control" value="{{ worker.occupation }}"/>
+        </div>
+        <div class="form-group">
+            <label for="sel1">Classification level:</label>
+            <select class="form-control" id="sel1" name="classlvl" value="{{ worker.classlvl }}">
+                <option value="{{ worker.classlvl }}" selected>Old value, {{ worker.classlvl }}</option>
+                <option value="1">1, Staff</option>
+                <option value="2">2, Manager</option>
+                <option value="3">3, Chef</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-default" name="edit_worker">Submit</button>
+    </form>
+</div>
+{% endif %}

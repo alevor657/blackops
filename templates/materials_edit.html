@@ -1,0 +1,50 @@
+{% if not edit_mat %}
+<div class="col-md-5 col-md-offset-2 text-center">
+    <h3>Add materials</h3>
+    <form role="form" method="POST" action="{{url_for('personal')}}">
+        <div class="form-group">
+            <label for="type">Type: </label>
+            <input type="text" name="type" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="price">Price: </label>
+            <input type="text" name="price" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="sel2">Classification level:</label>
+            <select class="form-control" id="sel2" name="classlvl">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-default" name="add_material">Submit</button>
+    </form>
+</div>
+{% endif %}
+
+{% if edit_mat %}
+<div class="col-md-5 col-md-offset-2 text-center">
+    <h3>Edit {{ material.material_type }}</h3>
+    <form role="form" method="POST" action="{{url_for('personal') + '?edit_mat=' + edit_mat}}">
+        <div class="form-group">
+            <label for="name">Type: </label>
+            <input type="text" name="type" class="form-control" value="{{ material.material_type }}"/>
+        </div>
+        <div class="form-group">
+            <label for="occupation">Price: </label>
+            <input type="text" name="price" class="form-control" value="{{ material.price }}"/>
+        </div>
+        <div class="form-group">
+            <label for="sel3">Classification level:</label>
+            <select class="form-control" id="sel3" name="classlvl" value="{{ material.classlvl }}">
+                <option value="{{ material.classlvl }}" selected>Old value, {{ material.classlvl }}</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-default" name="edit_material">Submit</button>
+    </form>
+</div>
+{% endif %}

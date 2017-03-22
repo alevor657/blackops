@@ -45,9 +45,14 @@ def dashboard():
 def personal():
     """ Main dashboard """
     if g.user:
+        edit_per = request.args.get('edit_per')
+        edit_mat = request.args.get('edit_mat')
+
         if (request.method == 'GET'):
             delete_per = request.args.get('del_per')
             delete_mat = request.args.get('del_mat')
+
+
             if (delete_per):
                 con.delete_worker(delete_per)
             if (delete_mat):
@@ -58,11 +63,19 @@ def personal():
                 con.add_worker(request.form)
             elif 'add_material' in request.form:
                 con.add_material(request.form)
+            elif 'edit_worker' in request.form:
+                con.edit_worker(edit_per, request.form)
+            elif 'edit_material' in request.form:
+                con.edit_material(edit_mat, request.form)
 
         return render_template(
             'personal.html',
             table_workers=con.create_workers_table(),
-            table_material=con.create_material_table()
+            table_material=con.create_material_table(),
+            edit_per=edit_per,
+            edit_mat=edit_mat,
+            worker=con.get_worker(edit_per),
+            material=con.get_material(edit_mat)
         )
     else:
         return redirect(url_for('index'))

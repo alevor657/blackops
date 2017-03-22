@@ -1,7 +1,14 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+
+# Importing the mapped tables
 from materials import Materials
 from workers import Workers
+
+# Importing the workers classes
+from chef import Chef
+from staff import Staff
+from manager import Manager
 
 class Controller():
     """
@@ -36,7 +43,6 @@ class Controller():
         table = "<thead><tr>"
 
         for item in self.workers_all_headings:
-            print(item)
             table += """
             <th>{}</th>
             """.format(item)
@@ -50,7 +56,11 @@ class Controller():
                             <td>{name}</td>
                             <td>{occup}</td>
                             <td>{lvl}</td>
-                            <td><a href='?del_per={id}'>delete</a></td>
+                            <td>
+                                <a href='?del_per={id}'>delete</a>
+                                <span>&nbsp;|&nbsp;</span>
+                                <a href='?edit_per={id}'>edit</a>
+                            </td>
                         </tr>""".format(
                             id=item.id,
                             name=item.name,
@@ -63,8 +73,7 @@ class Controller():
     def create_material_table(self):
         table = "<thead><tr>"
 
-        for item in self.workers_all_headings:
-            print(item)
+        for item in self.material_all_headings:
             table += """
             <th>{}</th>
             """.format(item)
@@ -78,7 +87,11 @@ class Controller():
                             <td>{t}</td>
                             <td>{price}</td>
                             <td>{lvl}</td>
-                            <td><a href='?del_mat={id}'>delete</a></td>
+                            <td>
+                                <a href='?del_mat={id}'>delete</a>
+                                <span>&nbsp;|&nbsp;</span>
+                                <a href='?edit_mat={id}'>edit</a>
+                            </td>
                         </tr>""".format(
                             id=item.id,
                             t=item.material_type,
@@ -97,16 +110,36 @@ class Controller():
         self.session.commit()
 
     def add_worker(self, form):
-        worker = Workers(
-            name=form["name"],
-            occupation=form["occupation"],
-            classlvl=form["classlvl"]
-        )
+        level = int(form['classlvl'])
+        worker = None
+        print(level)
+
+        if (level == 1):
+            worker = Staff(
+                name=form["name"],
+                classlvl=form["classlvl"]
+            )
+        elif (level == 2):
+            worker = Manager(
+                name=form["name"],
+                classlvl=form["classlvl"]
+            )
+        elif (level == 3):
+            worker = Chef(
+                name=form["name"],
+                classlvl=form["classlvl"]
+            )
+        # worker = Workers(
+        #     name=form["name"],
+        #     occupation=form["occupation"],
+        #     classlvl=form["classlvl"]
+        # )
 
         self.session.add(worker)
         self.session.commit()
 
     def add_material(self, form):
+        print(form)
         material = Materials(
             material_type=form["type"],
             price=form["price"],
@@ -115,3 +148,17 @@ class Controller():
 
         self.session.add(material)
         self.session.commit()
+
+    def get_worker(self, edit_id):
+        return self.session.query(Workers).filter(Workers.id == edit_id).first()
+
+    def get_material(self, edit_id):
+        return self.session.query(Materials).filter(Materials.id == edit_id).first()
+
+    def edit_worker(self, worker, form):
+        self.delete_worker(worker)
+        self.add_worker(form)
+
+    def edit_material(self, material, form):
+        self.delete_material(material)
+        self.add_material(form)

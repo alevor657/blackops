@@ -17,44 +17,10 @@
     </div>
 
     <div class="row">
-        <div class="col-md-5 text-center">
-            <h3>Add workers</h3>
-            <form role="form" method="POST" action="{{url_for('personal')}}">
-                <div class="form-group">
-                    <label for="name">Name: </label>
-                    <input type="text" name="name" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="occupation">Occupation: </label>
-                    <input type="text" name="occupation" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="classlvl">Classification level: </label>
-                    <input type="number" name="classlvl" class="form-control" />
-                </div>
-                <button type="submit" class="btn btn-default" name="add_worker">Submit</button>
-            </form>
-        </div>
-
-        <div class="col-md-5 col-md-offset-2 text-center">
-            <h3>Add materials</h3>
-            <form role="form" method="POST" action="{{url_for('personal')}}">
-                <div class="form-group">
-                    <label for="type">Type: </label>
-                    <input type="text" name="type" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="price">Price: </label>
-                    <input type="text" name="price" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="classlvl">Required classification level: </label>
-                    <input type="number" name="classlvl" class="form-control" />
-                </div>
-                <button type="submit" class="btn btn-default" name="add_material">Submit</button>
-            </form>
-        </div>
+        {% include 'persons_edit.html' %}
+        {% include 'materials_edit.html' %}
     </div>
 </div>
+
 
 {% include 'footer.html' %}
