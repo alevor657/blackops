@@ -47,16 +47,25 @@ def personal():
     if g.user:
         edit_per = request.args.get('edit_per')
         edit_mat = request.args.get('edit_mat')
+        workers_backpack = None
 
         if (request.method == 'GET'):
             delete_per = request.args.get('del_per')
             delete_mat = request.args.get('del_mat')
+            back = request.args.get('back')
 
 
             if (delete_per):
                 con.delete_worker(delete_per)
             if (delete_mat):
                 con.delete_material(delete_mat)
+            # if back:
+                # con.add_material()
+            try:
+                workers_backpack = con.get_worker(edit_per).backpack.split(', ')
+            except:
+                pass
+
 
         if (request.method == 'POST'):
             if 'add_worker' in request.form:
@@ -64,9 +73,11 @@ def personal():
             elif 'add_material' in request.form:
                 con.add_material(request.form)
             elif 'edit_worker' in request.form:
+                workers_backpack = con.get_worker(edit_per).backpack.split(', ')
                 con.edit_worker(edit_per, request.form)
             elif 'edit_material' in request.form:
                 con.edit_material(edit_mat, request.form)
+
 
         return render_template(
             'personal.html',
@@ -76,7 +87,8 @@ def personal():
             edit_mat=edit_mat,
             worker=con.get_worker(edit_per),
             material=con.get_material(edit_mat),
-            av_materials=con.get_avaliable_material(edit_per)
+            av_materials=con.get_avaliable_material(edit_per),
+            workers_backpack=workers_backpack
         )
     else:
         return redirect(url_for('index'))

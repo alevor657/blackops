@@ -42,21 +42,38 @@
         </div>
 
         <div class="form-group">
-            <div class="panel panel-default">
 
-                <div class="panel-heading">Manage items</div>
+
                 {% if av_materials %}
-                {% for mat in av_materials %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">Manage items</div>
+                    {% for mat in av_materials %}
+                    <li class="list-group-item">
+                        {{mat.material_type}}
+                        <div class="pull-right">
+                            <input id="opt" name="check" value="{{mat.material_type}}" type="checkbox" {{ 'checked' if mat.material_type in worker.backpack else '' }}/>
+                            <label for="opt" class="label-success"></label>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if worker.backpack %}
+                <div class="panel panel-default">
+                <div class="panel-heading">Manage {{ worker.name }}'s backpack</div>
+                {% for item in workers_backpack %}
                 <li class="list-group-item">
-                    {{mat.material_type}}
+                    {{item}}
                     <div class="pull-right">
-                        <input id="opt" name="check" value="{{mat.material_type}}" type="checkbox" {{ 'checked' if mat.material_type in worker.backpack else '' }}/>
+                        <input id="opt" name="check" value="{{item}}" type="checkbox" {{ 'checked' if item in worker.backpack else '' }}/>
                         <label for="opt" class="label-success"></label>
                     </div>
                 </li>
                 {% endfor %}
+                </div>
                 {% endif %}
-            </div>
+
         </div>
 
         <button type="submit" class="btn btn-default" name="edit_worker">Submit</button>

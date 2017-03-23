@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, and_, or_
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 # Importing the mapped tables
@@ -89,6 +89,7 @@ class Controller():
                             <td>{t}</td>
                             <td>{price}</td>
                             <td>{lvl}</td>
+                            <td>{owned}</td>
                             <td>
                                 <a href='?del_mat={id}'>delete</a>
                                 <span>&nbsp;|&nbsp;</span>
@@ -98,7 +99,8 @@ class Controller():
                             id=item.id,
                             t=item.material_type,
                             price=item.price,
-                            lvl=item.classlvl
+                            lvl=item.classlvl,
+                            owned=item.owned
                             )
         table += "</tbody>"
         return table
@@ -114,12 +116,9 @@ class Controller():
     def add_worker(self, form):
         level = int(form['classlvl'])
         worker = None
+
         backpack = ", "
         backpack = backpack.join(form.getlist('check'))
-
-        # Delete materials from database
-        for item in form.getlist('check'):
-            self.delete_material(self.get_material_by_type(item).id)
 
         if (level == 1):
             worker = Staff(
@@ -139,6 +138,13 @@ class Controller():
                 classlvl=form["classlvl"],
                 backpack=backpack
             )
+
+        for item in form.getlist('check'):
+            self.own(self.get_material_by_type(item), form['name'])
+
+        if not form.getlist('check'):
+            for item in self.session.query(Materials).filter(Materials.owned == worker.name).all():
+                self.deown(item)
 
         self.session.add(worker)
         self.session.commit()
@@ -177,5 +183,13 @@ class Controller():
         if not worker:
             return None
 
-        avaliable_materials = self.session.query(Materials).filter(Materials.classlvl <= worker.classlvl).all()
+        avaliable_materials = self.session.query(Materials).filter(and_(Materials.classlvl <= worker.classlvl, ~Materials.material_type.in_(self.get_worker(worker.id).backpack.split(', ')))).all()
         return avaliable_materials
+
+    def own(self, item, owner):
+        item.owned = owner
+        self.session.commit()
+
+    def deown(self, item):
+        item.owned = None
+        self.session.commit()

@@ -2,7 +2,7 @@
 
 """ Mapping of class """
 
-from sqlalchemy import Column, Float, String, Integer
+from sqlalchemy import Column, Float, String, Integer, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -14,6 +14,7 @@ class Materials(Base):
     material_type = Column(String)
     price = Column(Integer)
     classlvl = Column(Integer)
+    owned = Column(String)
 
     def __init__(self, material_type, price, classlvl):
         """ init method """
