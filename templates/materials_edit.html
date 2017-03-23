@@ -3,8 +3,15 @@
     <h3>Add materials</h3>
     <form role="form" method="POST" action="{{url_for('personal')}}">
         <div class="form-group">
-            <label for="type">Type: </label>
-            <input type="text" name="type" class="form-control" />
+            <label for="sel2">Type:</label>
+            <select class="form-control" id="sel2" name="type">
+                <option value="rifle">Rifle</option>
+                <option value="tank">Tank</option>
+                <option value="boat">Boat</option>
+                <option value="knife">Knife</option>
+                <option value="nuke">Nuke</option>
+                <option value="lasersword">Lasersword</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="price">Price: </label>

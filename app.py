@@ -17,6 +17,7 @@ def before_request():
     if 'user' in session:
         g.user = session['user']
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """ Login page """
@@ -25,7 +26,7 @@ def index():
         session['user'] = con.check_login_data(request.form)
         g.user = session['user']
         if g.user:
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('personal'))
         else:
             flash("Bad password, try again")
             return redirect(url_for('index'))
@@ -49,6 +50,11 @@ def personal():
         edit_mat = request.args.get('edit_mat')
         workers_backpack = None
 
+        try:
+            workers_backpack = con.get_worker(edit_per).backpack.split(', ')
+        except:
+            pass
+
         if (request.method == 'GET'):
             delete_per = request.args.get('del_per')
             delete_mat = request.args.get('del_mat')
@@ -59,12 +65,6 @@ def personal():
                 con.delete_worker(delete_per)
             if (delete_mat):
                 con.delete_material(delete_mat)
-            # if back:
-                # con.add_material()
-            try:
-                workers_backpack = con.get_worker(edit_per).backpack.split(', ')
-            except:
-                pass
 
 
         if (request.method == 'POST'):
@@ -73,7 +73,6 @@ def personal():
             elif 'add_material' in request.form:
                 con.add_material(request.form)
             elif 'edit_worker' in request.form:
-                workers_backpack = con.get_worker(edit_per).backpack.split(', ')
                 con.edit_worker(edit_per, request.form)
             elif 'edit_material' in request.form:
                 con.edit_material(edit_mat, request.form)

@@ -2,7 +2,7 @@
     <div class="modal-dialog">
         <div class="loginmodal-container">
             <h1>Log In</h1><br>
-            <form action="/" method="POST">
+            <form action="{{ url_for('index') }}" method="POST">
                 <input type="text" name="username" placeholder="Username">
                 <input type="password" name="password" placeholder="Password">
                 <input type="submit" name="login" class="login loginmodal-submit" value="Login">

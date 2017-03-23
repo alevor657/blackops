@@ -150,7 +150,6 @@ class Controller():
         self.session.commit()
 
     def add_material(self, form):
-        print(form)
         material = Materials(
             material_type=form["type"],
             price=form["price"],
