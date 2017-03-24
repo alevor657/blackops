@@ -2,12 +2,16 @@
 
 """ Mapping of class """
 
-from sqlalchemy import Column, Float, String, Integer, Boolean
+from sqlalchemy import Column, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
 class Materials(Base):
+    """
+    Mapping a table for sqlalchemy
+    """
+
     __tablename__ = "materials"
 
     id = Column(Integer, primary_key=True)

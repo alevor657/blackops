@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
+"""
+Main module
+"""
 
 from flask import Flask, render_template, flash, redirect, url_for, g, request, session
 from controller import Controller
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='lib')
+
 con = Controller()
 
 # Generate a secret word used for sessions
@@ -12,6 +16,9 @@ app.secret_key = "A very secret key"
 
 @app.before_request
 def before_request():
+    """
+    Runs before all requests
+    """
     g.user = None
 
     if 'user' in session:
@@ -52,14 +59,12 @@ def personal():
 
         try:
             workers_backpack = con.get_worker(edit_per).backpack.split(', ')
-        except:
+        except AttributeError:
             pass
 
         if (request.method == 'GET'):
             delete_per = request.args.get('del_per')
             delete_mat = request.args.get('del_mat')
-            back = request.args.get('back')
-
 
             if (delete_per):
                 con.delete_worker(delete_per)
@@ -102,6 +107,10 @@ def material():
 
 @app.route('/dropsession/')
 def dropsession():
+    """
+    Drops the session
+    """
+
     session.clear()
     return redirect(url_for('index'))
 
