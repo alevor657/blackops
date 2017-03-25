@@ -14,6 +14,11 @@ from chef import Chef
 from staff import Staff
 from manager import Manager
 
+# Importing the materials classes
+from weapon import Weapon
+from transport import Transport
+from utility import Utility
+
 class Controller():
     """
     Gives control over data to app.py
@@ -170,13 +175,35 @@ class Controller():
 
     def add_material(self, form):
         """
-        Deletes a material
+        Adds a material
         """
-        material = Materials(
-            material_type=form["type"],
-            price=form["price"],
-            classlvl=form["classlvl"]
-        )
+
+        name, level = form['type'].split(' ')
+        level = int(level)
+
+        material = None
+
+        if level == 1:
+            material = Utility(
+                material_type=name,
+                price=form["price"],
+            )
+        elif level == 2:
+            material = Transport(
+                material_type=name,
+                price=form["price"],
+            )
+        elif level == 3:
+            material = Weapon(
+                material_type=name,
+                price=form["price"],
+            )
+
+        # material = Materials(
+        #     material_type=form["type"],
+        #     price=form["price"],
+        #     classlvl=form["classlvl"]
+        # )
 
         self.session.add(material)
         self.session.commit()
