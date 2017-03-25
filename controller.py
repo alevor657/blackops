@@ -177,8 +177,15 @@ class Controller():
         """
         Adds a material
         """
+        name = None
+        level = None
 
-        name, level = form['type'].split(' ')
+        try:
+            name, level = form['type'].split(' ')
+        except ValueError:
+            name = form['type']
+            level = form['classlvl']
+
         level = int(level)
 
         material = None
