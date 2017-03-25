@@ -260,7 +260,11 @@ class Controller():
         all_materials = self.session.query(Materials)
 
         avaliable_materials = all_materials.filter(
-            and_(Materials.classlvl <= worker.classlvl, ~Materials.material_type.in_(bpack))
+            and_(\
+            Materials.classlvl <= worker.classlvl,\
+            ~Materials.material_type.in_(bpack),\
+            Materials.owned == None\
+            )
         ).all()
 
         return avaliable_materials
